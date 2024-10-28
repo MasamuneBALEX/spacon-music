@@ -1,0 +1,13 @@
+@import '_variables';
+@import '_main';
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+* {
+    font-family: 'Piazolla', 'Segoe UI', sans-serif;
+}
+
+@import '_sakura-design';
