@@ -1,39 +1,61 @@
-// Функция для загрузки HTML-контента по указанному пути
-function loadPage(path) {
-    fetch(`${path}.html`) // Загрузка HTML-контента для указанного пути
+// Устанавливаем язык по умолчанию или читаем его из localStorage
+let currentLanguage = localStorage.getItem('language') || 'ru';
+
+// Функция загрузки перевода
+function loadTranslation(language) {
+    fetch(`languages/${language}-version.json`) // Путь к JSON-файлам
         .then(response => {
-            if (!response.ok) throw new Error('Page not found');
-            return response.text();
+            if (!response.ok) throw new Error('Translation file not found'); // Обработка ошибки, если файл не найден
+            return response.json();
         })
-        .then(content => {
-            document.getElementById('content').innerHTML = content; // Вставка нового содержимого
-            window.scrollTo(0, 0); // Прокрутка к началу страницы
+        .then(translation => {
+            // Обновляем текст на странице
+            document.querySelectorAll('[data-key]').forEach(element => {
+                const key = element.getAttribute('data-key');
+                element.textContent = translation[key];
+            });
+
+            // Обновляем содержимое виджета
+            const widgetContent = translation.widgetContent; // Получаем содержимое виджета
+            const widgetContainer = document.getElementById('widget-content');
+            widgetContainer.innerHTML = ''; // Очищаем контейнер виджета перед добавлением нового содержимого
+
+            // Добавляем код виджета для русского и английского языка
+            widgetContainer.innerHTML = widgetContent; // Добавляем HTML внутри виджета
+
+            // Инициализируем виджет ВКонтакте только для русского языка
+            if (language === 'ru' && typeof VK !== 'undefined' && VK.Widgets) {
+                VK.Widgets.Group("vk_groups", { mode: 1, no_cover: 1, width: 290, height: 290, color1: "FFFFFF", color2: "000000", color3: "666666" }, 50158044);
+            }
         })
-        .catch(error => {
-            document.getElementById('content').innerHTML = '<p>Error loading page.</p>';
-            console.error('Error loading page:', error);
-        });
+        .catch(error => console.error('Error loading translation:', error));
 }
 
-// Обработчик кликов по ссылкам
-document.querySelectorAll('a[data-path]').forEach(link => {
-    link.addEventListener('click', event => {
-        event.preventDefault(); // Отключаем стандартный переход по ссылке
-        const path = link.getAttribute('data-path'); // Извлекаем путь из ссылки
-        history.pushState(null, '', `/${path}`); // Обновляем URL без перезагрузки
-        loadPage(path); // Загружаем новый контент
+// Функция обновления состояния кнопок языка
+function updateLanguageButtons() {
+    const buttons = document.querySelectorAll('.language-buttons button');
+    buttons.forEach(button => {
+        button.classList.toggle('button-active', button.textContent.toLowerCase() === currentLanguage);
+    });
+}
+
+// Обработчик кликов по кнопкам языка
+document.querySelectorAll('.language-buttons button').forEach(button => {
+    button.addEventListener('click', event => {
+        currentLanguage = button.textContent.toLowerCase(); // Устанавливаем язык по клику
+        localStorage.setItem('language', currentLanguage); // Сохраняем выбранный язык
+        loadTranslation(currentLanguage); // Загружаем перевод
+        updateLanguageButtons(); // Обновляем состояние кнопок
     });
 });
 
-// Поддержка кнопок "Назад" и "Вперед"
-window.addEventListener('popstate', () => {
-    // Загружаем текущий путь при навигации по истории
-    const path = location.pathname.slice(1) || 'index'; // Используем 'index' как путь по умолчанию
-    loadPage(path);
+// Загрузка перевода и установка активной кнопки при первой загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    loadTranslation(currentLanguage);
+    updateLanguageButtons();
 });
 
-// Загрузка раздела по умолчанию при первой загрузке
-document.addEventListener('DOMContentLoaded', () => {
-    const initialPath = location.pathname.slice(1) || 'index';
-    loadPage(initialPath); // Загрузка текущей страницы по умолчанию
+// Обновляем язык при навигации
+window.addEventListener('popstate', () => {
+    loadTranslation(currentLanguage);
 });

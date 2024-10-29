@@ -10,9 +10,8 @@
     flex-direction: column;
     // justify-content: space-between;
     align-items: center;
-    border-top-left-radius: $border-radius;
 
-    a {
+    button {
         display: block;
         color: $third-color;
         text-decoration-line: none;
@@ -21,8 +20,9 @@
         text-align: center;
         transition: 0.4s all;
         padding: 5px 0;
+        border: 0;
 
-        &:hover {
+        &:hover:last-child {
             background-color: $secondary-color;
             color: $primary-color;
         }
@@ -230,6 +230,10 @@
                 text-align: center;
                 color: $primary-color;
 
+                span {
+                    display: block;
+                    margin-right: 4px;
+                }
             }
 
             h4 {
@@ -240,7 +244,7 @@
             }
 
             p {
-                font-size: 22px;
+                font-size: 20px;
             }
         }
     }

@@ -1,0 +1,11 @@
+{
+    "music-link": "Music platforms",
+    "info-link": "Information",
+    "released-albums": "Released albums",
+    "vidgets": "Widgets",
+    "album-genre": "Genre:",
+    "album-date": "Release date:",
+    "album-tracks": "Tracks:",
+    "widget-name": "Facebook Group",
+    "widgetContent": "<iframe src=\"https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fspacon-music&tabs=timeline&width=290&height=290&small_header=true&adapt_container_width=true&hide_cover=false&show_facepile=false&appId\" width=\"290\" height=\"290\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"true\" allow=\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\"></iframe>"
+}
