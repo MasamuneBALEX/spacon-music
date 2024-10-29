@@ -21,18 +21,3 @@
     src: url('../font/HeptaSlab-Regular.ttf') format('truetype');
     font-weight: 400;
 }
-
-/* Другие стили шрифтов */
-
-@font-face {
-    font-family: 'Zelda';
-    src: url('../font/Zelda.otf') format('opentype');
-}
-
-@font-face {
-    font-family: 'Sangha';
-    /* Sakura-Links */
-    src: url('../font/Sangha.ttf') format('truetype');
-}
-
-/* Другие стили шрифтов */

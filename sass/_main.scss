@@ -289,6 +289,50 @@
     }
 }
 
+.nav-pages {
+    position: relative;
+    z-index: 1;
+    margin-top: 15px;
+
+    &_wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 15px;
+        width: 100%;
+        height: 40px;
+        background-color: $primary-color;
+        border-bottom-right-radius: $border-radius;
+        border-bottom-left-radius: $border-radius;
+    }
+
+    &_button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: calc(30% / 3);
+        height: 80%;
+        background-color: $secondary-color;
+        text-decoration-line: none;
+
+        span {
+            color: $primary-color;
+            font-family: 'Piazolla', sans-serif;
+            font-size: 20px;
+            transition: 0.4s all;
+        }
+
+        &:hover {
+            background-color: $third-color;
+        }
+    }
+
+    &-active {
+        background-color: $third-color;
+        pointer-events: none;
+    }
+}
+
 .footer {
     position: relative;
     z-index: 1;
