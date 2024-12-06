@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="./css/bootstrap-reboot.min.css">
     <link rel="stylesheet" href="./css/font-style.css">
     <link rel="stylesheet" href="./css/style.min.css">
-    <script type="text/javascript" src="https://vk.com/js/api/openapi.js?168"></script>
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
     <title>SPACON Music</title>
 </head>
@@ -18,8 +17,8 @@
     <div class="background-wrapper-gif"></div>
 
     <div class="language-buttons">
-        <a class="button-active" href="#567567">RU</a>
-        <a href="#">EN</a>
+        <button class="button-active">RU</button>
+        <button>EN</button>
     </div>
 
     <div class="container">
@@ -33,10 +32,11 @@
                         class="header_logo"><span>SPACON <br>
                         MUSIC</span></a>
 
-                <a class="header_button" href="https://masamunebalex.github.io/spacon-links/">Музыкальные
+                <a class="header_button" href="https://masamunebalex.github.io/spacon-links/"
+                    data-key="music-link">Музыкальные
                     площадки</a>
 
-                <a class="header_button" href="#">Информация</a>
+                <a class="header_button" href="#" data-key="info-link">Информация</a>
             </nav>
             <!-- </div> -->
         </header>
@@ -48,7 +48,7 @@
                 <section class="left-section">
 
                     <div class="main_title-block">
-                        <h1 class="main_header">Все выпущенные альбомы</h1>
+                        <h1 class="main_header" data-key="released-albums">Все выпущенные альбомы</h1>
                     </div>
 
                     <div class="main_albums">
@@ -68,9 +68,15 @@
 
                                     <!-- <h4></h4> -->
 
-                                    <p>Жанр: <br>Chillout / Future Bass</p>
-                                    <p>Дата релиза: 02.06.2017</p>
-                                    <p>Количество треков: 7</p>
+                                    <div><span data-key="album-genre">Жанр:</span>
+                                        <p>Chillout / Future Bass</p>
+                                    </div>
+                                    <div><span data-key="album-date">Дата релиза:</span>
+                                        <p>02.06.2017</p>
+                                    </div>
+                                    <div><span data-key="album-tracks">Количество треков:</span>
+                                        <p>7</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -91,9 +97,15 @@
 
                                     <!-- <h4></h4> -->
 
-                                    <p>Жанр: <br>Chillout</p>
-                                    <p>Дата релиза: 22.06.2022</p>
-                                    <p>Количество треков: 3</p>
+                                    <div><span data-key="album-genre">Жанр:</span>
+                                        <p>Chillout</p>
+                                    </div>
+                                    <div><span data-key="album-date">Дата релиза:</span>
+                                        <p>22.06.2022</p>
+                                    </div>
+                                    <div><span data-key="album-tracks">Количество треков:</span>
+                                        <p>3</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -115,9 +127,15 @@
 
                                     <!-- <h4></h4> -->
 
-                                    <p>Жанр: <br>Trap / Future Bass</p>
-                                    <p>Дата релиза: 25.05.2021</p>
-                                    <p>Количество треков: 1</p>
+                                    <div><span data-key="album-genre">Жанр:</span>
+                                        <p> Trap / Future Bass</p>
+                                    </div>
+                                    <div><span data-key="album-date">Дата релиза:</span>
+                                        <p>25.05.2021</p>
+                                    </div>
+                                    <div><span data-key="album-tracks">Количество треков:</span>
+                                        <p>1</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -140,9 +158,15 @@
 
                                     <!-- <h4></h4> -->
 
-                                    <p>Жанр: <br>Chillout / Downtempo</p>
-                                    <p>Дата релиза: 08.01.2018</p>
-                                    <p>Количество треков: 6</p>
+                                    <div><span data-key="album-genre">Жанр:</span>
+                                        <p>Chillout / Downtempo</p>
+                                    </div>
+                                    <div><span data-key="album-date">Дата релиза:</span>
+                                        <p>08.01.2018</p>
+                                    </div>
+                                    <div><span data-key="album-tracks">Количество треков:</span>
+                                        <p>6</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -165,9 +189,15 @@
 
                                     <!-- <h4></h4> -->
 
-                                    <p>Жанр: <br>Chillout / Downtempo</p>
-                                    <p>Дата релиза: 22.05.2021</p>
-                                    <p>Количество треков: 1</p>
+                                    <div><span data-key="album-genre">Жанр:</span>
+                                        <p>Chillout / Downtempo</p>
+                                    </div>
+                                    <div><span data-key="album-date">Дата релиза:</span>
+                                        <p>22.05.2021</p>
+                                    </div>
+                                    <div><span data-key="album-tracks">Количество треков:</span>
+                                        <p>1</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -179,7 +209,7 @@
                 <section class="right-section">
 
                     <div class="main_title-block title_radius">
-                        <h2 class="main_vidgets-header">Виджеты</h2>
+                        <h2 class="main_vidgets-header" data-key="vidgets">Виджеты</h2>
                     </div>
 
                     <div class="main_vidgets">
@@ -199,10 +229,10 @@
                         <div class="main_vidget">
 
                             <div class="main_vidget-header">
-                                <h3>VK Группа</h3>
+                                <h3 data-key="widget-name">VK Группа</h3>
                             </div>
 
-                            <div class="main_vidget-element main_vidget-element-flex">
+                            <div class="main_vidget-element main_vidget-element-flex" id="widget-content">
 
                                 <div id="vk_groups"></div>
                                 <script type="text/javascript">
@@ -241,6 +271,7 @@
         </footer>
     </div>
     <script src="./js/script.js"></script>
+    <script src="https://vk.com/js/api/openapi.js?168" type="text/javascript"></script>
 </body>
 
 </html>

@@ -21,3 +21,8 @@
     src: url('../font/HeptaSlab-Regular.ttf') format('truetype');
     font-weight: 400;
 }
+
+@font-face {
+    font-family: 'SVG-Icons';
+    src: url('../font/icomoon.woff') format('woff');
+}

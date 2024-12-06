@@ -1,0 +1,36 @@
+.language-buttons {
+    top: 15px;
+    right: 10%;
+    position: fixed;
+    z-index: 1;
+    width: 80px;
+    // height: 60px;
+    background-color: $primary-color;
+    display: flex;
+    flex-direction: column;
+    // justify-content: space-between;
+    align-items: center;
+
+    button {
+        display: block;
+        color: $third-color;
+        text-decoration-line: none;
+        height: calc(100% / 2);
+        width: 100%;
+        text-align: center;
+        transition: 0.4s all;
+        padding: 5px 0;
+        border: 0;
+
+        &:hover:last-child {
+            background-color: $secondary-color;
+            color: $primary-color;
+        }
+    }
+
+    .button-active {
+        background-color: $secondary-color;
+        color: $primary-color;
+        pointer-events: none;
+    }
+}

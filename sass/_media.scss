@@ -1,0 +1,250 @@
+@media (max-width: 1400px) {
+    .language-buttons {
+        right: 6%;
+    }
+}
+
+@media (max-width: 1250px) {
+    .language-buttons {
+        left: 1%;
+    }
+}
+
+@media (max-width: 1120px) {
+    .language-buttons {
+        width: 3vw;
+        left: 0.5%;
+    }
+}
+
+@media (max-width: 992px) {
+
+    .language-buttons {
+        display: none;
+    }
+
+    .main {
+        &_wrapper {
+
+            .mini-vidget-links {
+                display: flex;
+            }
+
+            .left-section {
+                width: 100vw;
+
+                .language-buttons {
+                    display: flex;
+                    position: relative;
+                    font-size: 3vw;
+                    line-height: 3.4vw;
+                    top: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    z-index: 3;
+                    width: 150px;
+                    height: 80px;
+                    // margin-top: 10px;
+                }
+
+                .main_title-block {
+                    margin-top: 15px;
+                }
+            }
+
+        }
+
+        &_album {
+
+            &-img {
+                width: 250px;
+                height: 250px;
+            }
+        }
+
+
+        .right-section {
+            display: none;
+
+            .main_vidgets {
+                // margin-top: 9px;
+            }
+        }
+    }
+
+}
+
+@media (max-width: 600px) {
+    .header {
+        &_button-wrapper {
+            flex-direction: column;
+            column-gap: 0;
+            row-gap: 15px;
+        }
+
+        &_button {
+            margin: 0 auto;
+            width: 95%;
+        }
+    }
+
+    .main {
+        &_wrapper {
+
+            .mini-vidget-links {}
+
+            .left-section {
+
+                .language-buttons {
+                    width: 95%;
+                    font-size: 4vw;
+                }
+
+                .main_title-block {
+                    width: 95%;
+                    margin: 15px auto 0;
+                }
+            }
+
+        }
+
+        &_header {
+            font-size: 6vw;
+        }
+    }
+
+    .mini-vidget-links {
+
+        .soundcloud-block,
+        .vkgroup-block {
+            height: 8vw;
+
+            a {
+                font-size: 3.5vw;
+            }
+        }
+    }
+}
+
+@media (max-width: 540px) {
+    .main {
+        &_album {
+            &-block {
+                flex-direction: column;
+                column-gap: 0;
+                row-gap: 20px;
+            }
+
+            &-img {
+                width: 300px;
+                height: 300px;
+            }
+
+            &-info {
+                width: 300px;
+
+                div {
+
+                    span,
+                    p {
+                        font-size: 5vw;
+                    }
+                }
+            }
+        }
+
+    }
+
+    .mini-vidget-links {
+
+        .soundcloud-block,
+        .vkgroup-block {
+            height: 10vw;
+
+            a {
+                font-size: 4vw;
+            }
+        }
+    }
+}
+
+@media (max-width: 360px) {
+    .main {
+
+        &_wrapper {
+            .left-section {
+                .language-buttons {
+                    font-size: 6vw;
+                }
+            }
+        }
+
+        &_header {
+            font-size: 8vw;
+        }
+
+        .mini-vidget-links {
+            width: 85%;
+            column-gap: 15px;
+
+            .soundcloud-block,
+            .vkgroup-block {
+                height: 16vw;
+
+                a {
+                    font-size: 5vw;
+                }
+            }
+        }
+
+        &_album {
+            &-header {
+                // width: 95%;
+                margin: 0 auto;
+                height: auto;
+
+                h3 {
+                    font-size: 12vw;
+                }
+            }
+
+            &-info {
+                div {
+
+                    span,
+                    p {
+                        font-size: 7vw;
+                    }
+                }
+            }
+
+            &-block {
+                margin: 15px auto 0;
+                width: 95vw;
+                padding: 5vw;
+            }
+        }
+    }
+
+    .nav-pages {
+        width: 95%;
+        margin: 15px auto 0;
+
+        &_wrapper {
+            height: 80px;
+        }
+
+        &_button {
+            width: 20%;
+        }
+    }
+
+    .footer {
+        width: 95%;
+        margin: 15px auto 0;
+
+        &-wrapper {
+            height: auto;
+        }
+    }
+}
