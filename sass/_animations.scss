@@ -1,0 +1,18 @@
+@keyframes snowfall {
+    0% {
+        transform: skew(0deg);
+    }
+
+    25% {
+        transform: skew(-20deg);
+    }
+
+    50% {
+        transform: skew(0deg);
+    }
+
+
+    100% {
+        transform: skew(20deg);
+    }
+}
