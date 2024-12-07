@@ -60,6 +60,11 @@
                 width: 250px;
                 height: 250px;
             }
+
+            &-img-shadow {
+                width: 255px;
+                height: 255px;
+            }
         }
 
 
@@ -156,6 +161,25 @@
 
         }
 
+        // Skew эффект у данных карточек
+
+        &_album {
+            &-info {
+                width: 35vw;
+
+                div {
+                    transform: skew(-16deg);
+
+                    span,
+                    p {
+                        transform: skew(16deg);
+                    }
+                }
+            }
+        }
+
+        // Skew эффект у данных карточек
+
         &_header {
             font-size: 6vw;
         }
@@ -208,8 +232,14 @@
                 height: 300px;
             }
 
+            &-img-shadow {
+                width: 305px;
+                height: 305px;
+            }
+
             &-info {
                 width: 300px;
+                row-gap: 4.5vw; //Для лучшей читаемости в Skew режиме
 
                 div {
 
@@ -304,6 +334,11 @@
                 height: 80vw;
             }
 
+            &-img-shadow {
+                width: 79vw;
+                height: 79vw;
+            }
+
             &-info {
                 width: 80vw;
 
@@ -320,6 +355,7 @@
                 margin: 15px auto 0;
                 width: 95vw;
                 padding: 5vw;
+                row-gap: 15px;
             }
         }
     }
