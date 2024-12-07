@@ -1,0 +1,21 @@
+@import 'variables';
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+* {
+    font-family: 'Piazolla', 'Segoe UI', sans-serif;
+}
+
+@import 'bootstrap-reboot';
+@import 'font-style';
+@import 'main';
+@import 'header';
+@import 'footer';
+@import 'nav-pages';
+@import 'sakura-design';
+@import 'language-buttons';
+@import 'mini-vidget-links';
+@import 'media';
