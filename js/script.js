@@ -1,15 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     let currentLanguage = localStorage.getItem('language') || 'ru';
-    let translationsCache = {}; // Кэш для данных переводов
+    let translationsCache = {}; // Кэш данных для переводов
+    let isSwitching = false; // Блокировка для предотвращения повторных кликов
 
-    // Безопасный поиск элемента
     const safeQuerySelector = selector => {
         const el = document.querySelector(selector);
         if (!el) console.error(`Could not find element: ${selector}`);
         return el;
     };
 
-    // Загрузка переводов из JSON
     async function loadTranslations(language) {
         try {
             if (language === 'en') {
@@ -24,14 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 return { ...primaryTranslations, ...customTranslations };
             }
-            return {}; // Пустой объект при русском языке
+            return {};
         } catch (error) {
-            console.error('Ошибка при загрузке данных:', error);
+            console.error('Ошибка при загрузке данных переводов:', error);
             return {};
         }
     }
 
-    // Переключение перевода и контента
     async function renderTranslations() {
         try {
             if (currentLanguage === 'en') {
@@ -44,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const key = el.getAttribute('data-key');
                     el.innerHTML = translationsCache['en'][key] || el.innerHTML;
                 });
-
+                
                 const widgetContainer = safeQuerySelector('#widget-content');
                 if (widgetContainer) {
                     widgetContainer.innerHTML = translationsCache['en'].widgetContent || '';
@@ -61,15 +59,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         } catch (error) {
-            console.error('Ошибка при рендеринге переводов:', error);
+            console.error('Ошибка при обновлении интерфейса:', error);
+        } finally {
+            isSwitching = false; // Сбрасываем блокировку после завершения обработки
         }
     }
 
-    // Сохранение контента для восстановления при возврате на русский
     function saveOriginalContent() {
         const elementsToCache = document.querySelectorAll('[data-key]');
         elementsToCache.forEach(el => el.setAttribute('data-original', el.innerHTML));
-
+        
         const widgetContainer = safeQuerySelector('#widget-content');
         if (widgetContainer) {
             widgetContainer.setAttribute('data-original', widgetContainer.innerHTML);
@@ -84,6 +83,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function handleLanguageChange(newLang) {
+        if (isSwitching) return; // Если переключение уже идёт, игнорируем клики
+        isSwitching = true; // Активируем блокировку
+
         if (newLang !== currentLanguage) {
             currentLanguage = newLang;
             localStorage.setItem('language', newLang);
