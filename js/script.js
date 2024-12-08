@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     let currentLanguage = localStorage.getItem('language') || 'ru';
-    let translationsCache = {};
-    let isProcessing = false; // Флаг обработки кликов
+    let isSwitching = false; // Флаг, чтобы не возникали конфликты
 
     const safeQuerySelector = selector => {
         const el = document.querySelector(selector);
@@ -9,78 +8,64 @@ document.addEventListener('DOMContentLoaded', () => {
         return el;
     };
 
+    // Загрузка данных переводов
     async function loadTranslations(language) {
         try {
             const response = await fetch(`languages/${language}-version.json`);
-            if (!response.ok) throw new Error('Failed to fetch');
+            if (!response.ok) throw new Error('Ошибка при загрузке данных');
             const data = await response.json();
             return data;
         } catch (error) {
-            console.error("Ошибка при загрузке данных:", error);
+            console.error("Ошибка:", error);
             return {};
         }
     }
 
-    async function renderTranslations() {
-        if (isProcessing) return; // Не выполнять повторно, если уже в процессе
-
-        isProcessing = true; // Устанавливаем флаг обработки клика
-
-        try {
-            if (currentLanguage === 'en') {
-                if (!translationsCache['en']) {
-                    translationsCache['en'] = await loadTranslations('en');
-                }
-                const elementsToTranslate = document.querySelectorAll('[data-key]');
-                elementsToTranslate.forEach(el => {
-                    const key = el.getAttribute('data-key');
-                    if (translationsCache['en'][key]) {
-                        el.innerHTML = translationsCache['en'][key];
-                    }
-                });
-            } else if (currentLanguage === 'ru') {
-                const elementsToRestore = document.querySelectorAll('[data-key]');
-                elementsToRestore.forEach(el => {
-                    el.innerHTML = el.getAttribute('data-original');
-                });
-            }
-
-            isProcessing = false; // Сбрасываем флаг после завершения рендеринга
-            updateLanguageButtons();
-        } catch (error) {
-            console.error("Ошибка при попытке переключить язык:", error);
-            isProcessing = false;
-        }
-    }
-
-    function saveOriginalContent() {
-        const elementsToCache = document.querySelectorAll('[data-key]');
-        elementsToCache.forEach(el => el.setAttribute('data-original', el.innerHTML));
-    }
-
+    // Актуализация кнопок
     function updateLanguageButtons() {
         const buttons = document.querySelectorAll('.language-buttons button');
+
         buttons.forEach(button => {
-            button.classList.toggle('button-active', button.textContent.toLowerCase() === currentLanguage);
+            const lang = button.textContent.toLowerCase();
+            if (lang === currentLanguage) {
+                button.classList.add('button-active');
+            } else {
+                button.classList.remove('button-active');
+            }
         });
     }
 
-    async function handleClickLanguageChange(event) {
-        const clickedLanguage = event.target.textContent.toLowerCase();
+    async function switchLanguage(lang) {
+        if (isSwitching) return; // Ожидаем, чтобы переключения не конфликтовали
+        isSwitching = true;
 
-        if (clickedLanguage !== currentLanguage) {
-            currentLanguage = clickedLanguage;
-            localStorage.setItem('language', currentLanguage);
-            await renderTranslations();
-        }
+        currentLanguage = lang;
+        localStorage.setItem('language', lang);
+
+        const translations = await loadTranslations(lang);
+        renderTranslations(translations);
+        updateLanguageButtons();
+
+        isSwitching = false;
+    }
+
+    function renderTranslations(translations) {
+        const elementsToTranslate = document.querySelectorAll('[data-key]');
+        elementsToTranslate.forEach(el => {
+            const key = el.getAttribute('data-key');
+            if (translations[key]) {
+                el.innerHTML = translations[key];
+            }
+        });
     }
 
     const languageButtons = document.querySelectorAll('.language-buttons button');
     languageButtons.forEach(button => {
-        button.addEventListener('click', handleClickLanguageChange);
+        button.addEventListener('click', (event) => {
+            const lang = event.target.textContent.toLowerCase();
+            if (lang !== currentLanguage) switchLanguage(lang);
+        });
     });
 
-    saveOriginalContent();
-    renderTranslations();
     updateLanguageButtons();
 });
