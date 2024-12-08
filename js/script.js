@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     let currentLanguage = localStorage.getItem('language') || 'ru';
-    let translationsCache = {}; // Кэш данных для переводов
-    let isSwitching = false; // Блокировка для предотвращения повторных кликов
+    let translationsCache = {};
+    let isProcessing = false; // Флаг обработки кликов
 
     const safeQuerySelector = selector => {
         const el = document.querySelector(selector);
@@ -11,68 +11,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadTranslations(language) {
         try {
-            if (language === 'en') {
-                const primaryResponse = await fetch(`languages/${language}-version.json`);
-                if (!primaryResponse.ok) throw new Error('Primary JSON not found');
-                
-                const customResponse = await fetch(`languages/about-site_${language}-version.json`);
-                if (!customResponse.ok) throw new Error('Custom JSON not found');
-                
-                const primaryTranslations = await primaryResponse.json();
-                const customTranslations = await customResponse.json();
-                
-                return { ...primaryTranslations, ...customTranslations };
-            }
-            return {};
+            const response = await fetch(`languages/${language}-version.json`);
+            if (!response.ok) throw new Error('Failed to fetch');
+            const data = await response.json();
+            return data;
         } catch (error) {
-            console.error('Ошибка при загрузке данных переводов:', error);
+            console.error("Ошибка при загрузке данных:", error);
             return {};
         }
     }
 
     async function renderTranslations() {
+        if (isProcessing) return; // Не выполнять повторно, если уже в процессе
+
+        isProcessing = true; // Устанавливаем флаг обработки клика
+
         try {
             if (currentLanguage === 'en') {
                 if (!translationsCache['en']) {
                     translationsCache['en'] = await loadTranslations('en');
                 }
-
                 const elementsToTranslate = document.querySelectorAll('[data-key]');
                 elementsToTranslate.forEach(el => {
                     const key = el.getAttribute('data-key');
-                    el.innerHTML = translationsCache['en'][key] || el.innerHTML;
+                    if (translationsCache['en'][key]) {
+                        el.innerHTML = translationsCache['en'][key];
+                    }
                 });
-                
-                const widgetContainer = safeQuerySelector('#widget-content');
-                if (widgetContainer) {
-                    widgetContainer.innerHTML = translationsCache['en'].widgetContent || '';
-                }
             } else if (currentLanguage === 'ru') {
                 const elementsToRestore = document.querySelectorAll('[data-key]');
                 elementsToRestore.forEach(el => {
-                    el.innerHTML = el.getAttribute('data-original') || el.innerHTML;
+                    el.innerHTML = el.getAttribute('data-original');
                 });
-
-                const widgetContainer = safeQuerySelector('#widget-content');
-                if (widgetContainer) {
-                    widgetContainer.innerHTML = widgetContainer.getAttribute('data-original') || '';
-                }
             }
+
+            isProcessing = false; // Сбрасываем флаг после завершения рендеринга
+            updateLanguageButtons();
         } catch (error) {
-            console.error('Ошибка при обновлении интерфейса:', error);
-        } finally {
-            isSwitching = false; // Сбрасываем блокировку после завершения обработки
+            console.error("Ошибка при попытке переключить язык:", error);
+            isProcessing = false;
         }
     }
 
     function saveOriginalContent() {
         const elementsToCache = document.querySelectorAll('[data-key]');
         elementsToCache.forEach(el => el.setAttribute('data-original', el.innerHTML));
-        
-        const widgetContainer = safeQuerySelector('#widget-content');
-        if (widgetContainer) {
-            widgetContainer.setAttribute('data-original', widgetContainer.innerHTML);
-        }
     }
 
     function updateLanguageButtons() {
@@ -82,24 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function handleLanguageChange(newLang) {
-        if (isSwitching) return; // Если переключение уже идёт, игнорируем клики
-        isSwitching = true; // Активируем блокировку
+    async function handleClickLanguageChange(event) {
+        const clickedLanguage = event.target.textContent.toLowerCase();
 
-        if (newLang !== currentLanguage) {
-            currentLanguage = newLang;
-            localStorage.setItem('language', newLang);
+        if (clickedLanguage !== currentLanguage) {
+            currentLanguage = clickedLanguage;
+            localStorage.setItem('language', currentLanguage);
             await renderTranslations();
-            updateLanguageButtons();
         }
     }
 
     const languageButtons = document.querySelectorAll('.language-buttons button');
     languageButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const newLanguage = button.textContent.toLowerCase();
-            await handleLanguageChange(newLanguage);
-        });
+        button.addEventListener('click', handleClickLanguageChange);
     });
 
     saveOriginalContent();
