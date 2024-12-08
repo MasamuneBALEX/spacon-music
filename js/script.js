@@ -1,119 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
     let currentLanguage = localStorage.getItem('language') || 'ru';
-    let translationsCache = {}; // Кэш для хранения данных из JSON при переключении языка
+    let translationsCache = {}; // Кэш для данных переводов
 
     // Безопасный поиск элемента
-    function safeQuerySelector(selector) {
+    const safeQuerySelector = selector => {
         const el = document.querySelector(selector);
-        if (!el) {
-            console.error(`Could not find element: ${selector}`);
-        }
+        if (!el) console.error(`Could not find element: ${selector}`);
         return el;
-    }
+    };
 
     // Загрузка переводов из JSON
     async function loadTranslations(language) {
         try {
             if (language === 'en') {
                 const primaryResponse = await fetch(`languages/${language}-version.json`);
-                if (!primaryResponse.ok) throw new Error('Primary JSON file not found');
-                const primaryTranslations = await primaryResponse.json();
-
+                if (!primaryResponse.ok) throw new Error('Primary JSON not found');
+                
                 const customResponse = await fetch(`languages/about-site_${language}-version.json`);
-                if (!customResponse.ok) throw new Error('Custom JSON file not found');
+                if (!customResponse.ok) throw new Error('Custom JSON not found');
+                
+                const primaryTranslations = await primaryResponse.json();
                 const customTranslations = await customResponse.json();
-
+                
                 return { ...primaryTranslations, ...customTranslations };
             }
-            return {}; // Возвращаем пустой объект при возврате на русский
+            return {}; // Пустой объект при русском языке
         } catch (error) {
-            console.error('Error loading translations:', error);
+            console.error('Ошибка при загрузке данных:', error);
             return {};
         }
     }
 
-    // Загрузка VK-виджета динамически
-    async function loadVKWidget() {
-        return new Promise((resolve, reject) => {
-            if (typeof VK === 'undefined') {
-                const script = document.createElement('script');
-                script.src = "https://vk.com/js/api/openapi.js?168";
-                script.async = true;
-                script.onload = () => {
-                    if (typeof VK !== 'undefined' && VK.Widgets) {
-                        resolve();
-                    } else {
-                        reject('VK.Widgets not defined after script load');
-                    }
-                };
-                script.onerror = () => reject('Failed to load VK script');
-                document.head.appendChild(script);
-            } else {
-                resolve();
-            }
-        });
-    }
-
-    async function initializeVKWidget() {
+    // Переключение перевода и контента
+    async function renderTranslations() {
         try {
-            await loadVKWidget();
-            if (currentLanguage === 'ru' && typeof VK !== 'undefined' && VK.Widgets) {
-                VK.Widgets.Group("vk_groups", {
-                    mode: 1,
-                    no_cover: 1,
-                    width: 290,
-                    height: 290,
-                    color1: "FFFFFF",
-                    color2: "000000",
-                    color3: "666666"
-                }, 50158044);
+            if (currentLanguage === 'en') {
+                if (!translationsCache['en']) {
+                    translationsCache['en'] = await loadTranslations('en');
+                }
+
+                const elementsToTranslate = document.querySelectorAll('[data-key]');
+                elementsToTranslate.forEach(el => {
+                    const key = el.getAttribute('data-key');
+                    el.innerHTML = translationsCache['en'][key] || el.innerHTML;
+                });
+
+                const widgetContainer = safeQuerySelector('#widget-content');
+                if (widgetContainer) {
+                    widgetContainer.innerHTML = translationsCache['en'].widgetContent || '';
+                }
+            } else if (currentLanguage === 'ru') {
+                const elementsToRestore = document.querySelectorAll('[data-key]');
+                elementsToRestore.forEach(el => {
+                    el.innerHTML = el.getAttribute('data-original') || el.innerHTML;
+                });
+
+                const widgetContainer = safeQuerySelector('#widget-content');
+                if (widgetContainer) {
+                    widgetContainer.innerHTML = widgetContainer.getAttribute('data-original') || '';
+                }
             }
         } catch (error) {
-            console.error('Error initializing VK Widget:', error);
+            console.error('Ошибка при рендеринге переводов:', error);
         }
     }
 
-    async function renderTranslations() {
-        if (currentLanguage === 'en') {
-            if (!translationsCache['en']) {
-                translationsCache['en'] = await loadTranslations('en');
-            }
-
-            const elementsToTranslate = document.querySelectorAll('[data-key]');
-            elementsToTranslate.forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (translationsCache['en'][key]) {
-                    el.innerHTML = translationsCache['en'][key];
-                } else {
-                    console.warn(`Key "${key}" is missing in translations`);
-                }
-            });
-
-            const widgetContainer = safeQuerySelector('#widget-content');
-            if (widgetContainer) {
-                widgetContainer.innerHTML = translationsCache['en'].widgetContent || '';
-                initializeVKWidget();
-            }
-        } else if (currentLanguage === 'ru') {
-            // Возвращаем исходный контент при переключении обратно на русский
-            const elementsToRestore = document.querySelectorAll('[data-key]');
-            elementsToRestore.forEach(el => {
-                const key = el.getAttribute('data-key');
-                el.innerHTML = el.getAttribute('data-original');
-            });
-
-            const widgetContainer = safeQuerySelector('#widget-content');
-            if (widgetContainer) {
-                widgetContainer.innerHTML = widgetContainer.getAttribute('data-original') || '';
-            }
-        }
-    }
-
+    // Сохранение контента для восстановления при возврате на русский
     function saveOriginalContent() {
         const elementsToCache = document.querySelectorAll('[data-key]');
-        elementsToCache.forEach(el => {
-            el.setAttribute('data-original', el.innerHTML);
-        });
+        elementsToCache.forEach(el => el.setAttribute('data-original', el.innerHTML));
 
         const widgetContainer = safeQuerySelector('#widget-content');
         if (widgetContainer) {
@@ -128,13 +83,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    async function handleLanguageChange(newLang) {
+        if (newLang !== currentLanguage) {
+            currentLanguage = newLang;
+            localStorage.setItem('language', newLang);
+            await renderTranslations();
+            updateLanguageButtons();
+        }
+    }
+
     const languageButtons = document.querySelectorAll('.language-buttons button');
     languageButtons.forEach(button => {
         button.addEventListener('click', async () => {
-            currentLanguage = button.textContent.toLowerCase();
-            localStorage.setItem('language', currentLanguage);
-            await renderTranslations();
-            updateLanguageButtons();
+            const newLanguage = button.textContent.toLowerCase();
+            await handleLanguageChange(newLanguage);
         });
     });
 
