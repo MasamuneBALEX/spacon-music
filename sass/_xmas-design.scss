@@ -38,6 +38,14 @@
 
 }
 
+@media (max-width: 992px) {
+
+    .background-wrapper {
+        background: linear-gradient(90deg, rgba(120, 151, 173, 0.45) 0%, rgba(0, 0, 0, 0.38) 50%, rgba(120, 151, 173, 0.45) 100%), url(../img/xmas-theme/bg-mobile.jpeg) center center / cover no-repeat;
+    }
+
+}
+
 .background-wrapper-gif {
     width: 100%;
     position: fixed;
