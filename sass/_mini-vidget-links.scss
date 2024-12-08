@@ -1,0 +1,53 @@
+.mini-vidget-links {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    min-height: 80px;
+    background-color: $primary-color;
+    transform: skewX(-20deg);
+    margin: 15px auto 0;
+    column-gap: 30px;
+}
+
+.soundcloud-block,
+.vkgroup-block {
+    background-color: $secondary-color;
+    width: 40%;
+    height: 7vw;
+    transition: 0.4s all;
+
+    a {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        transform: skewX(20deg);
+        color: $primary-color;
+        text-decoration-line: none;
+        font-size: 3vw;
+        column-gap: 10px;
+        line-height: 3vw;
+    }
+}
+
+.soundcloud-block:hover,
+.vkgroup-block:hover {
+    background: $third-color url(../img/header/sakura.gif) center center / 40% no-repeat;
+}
+
+.icon-soundcloud,
+.icon-vk {
+    font-family: 'SVG-Icons';
+    font-size: 5.5vw;
+}
+
+.icon-soundcloud:before {
+    content: "\e901";
+}
+
+.icon-vk:before {
+    content: "\e900";
+}
