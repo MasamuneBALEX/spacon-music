@@ -1,142 +1,144 @@
-// // Устанавливаем язык по умолчанию или читаем его из localStorage
-// let currentLanguage = localStorage.getItem('language') || 'ru';
+document.addEventListener('DOMContentLoaded', () => {
+    let currentLanguage = localStorage.getItem('language') || 'ru';
+    let translationsCache = {}; // Кэш для хранения данных из JSON при переключении языка
 
-// // Функция загрузки перевода
-// function loadTranslation(language) {
-//     fetch(`languages/${language}-version.json`) // Путь к JSON-файлам
-//         .then(response => {
-//             if (!response.ok) throw new Error('Translation file not found'); // Обработка ошибки, если файл не найден
-//             return response.json();
-//         })
-//         .then(translation => {
-//             // Обновляем текст на странице
-//             document.querySelectorAll('[data-key]').forEach(element => {
-//                 const key = element.getAttribute('data-key');
-//                 element.textContent = translation[key];
-//             });
+    // Безопасный поиск элемента
+    function safeQuerySelector(selector) {
+        const el = document.querySelector(selector);
+        if (!el) {
+            console.error(`Could not find element: ${selector}`);
+        }
+        return el;
+    }
 
-//             // Обновляем содержимое виджета
-//             const widgetContent = translation.widgetContent; // Получаем содержимое виджета
-//             const widgetContainer = document.getElementById('widget-content');
-//             widgetContainer.innerHTML = ''; // Очищаем контейнер виджета перед добавлением нового содержимого
+    // Загрузка переводов из JSON
+    async function loadTranslations(language) {
+        try {
+            if (language === 'en') {
+                const primaryResponse = await fetch(`/languages/${language}-version.json`);
+                if (!primaryResponse.ok) throw new Error('Primary JSON file not found');
+                const primaryTranslations = await primaryResponse.json();
 
-//             // Добавляем код виджета для русского и английского языка
-//             widgetContainer.innerHTML = widgetContent; // Добавляем HTML внутри виджета
+                const customResponse = await fetch(`/languages/about-site_${language}-version.json`);
+                if (!customResponse.ok) throw new Error('Custom JSON file not found');
+                const customTranslations = await customResponse.json();
 
-//             // Инициализируем виджет ВКонтакте только для русского языка
-//             if (language === 'ru' && typeof VK !== 'undefined' && VK.Widgets) {
-//                 VK.Widgets.Group("vk_groups", { mode: 1, no_cover: 1, width: 290, height: 290, color1: "FFFFFF", color2: "000000", color3: "666666" }, 50158044);
-//             }
-//         })
-//         .catch(error => console.error('Error loading translation:', error));
-// }
+                return { ...primaryTranslations, ...customTranslations };
+            }
+            return {}; // Возвращаем пустой объект при возврате на русский
+        } catch (error) {
+            console.error('Error loading translations:', error);
+            return {};
+        }
+    }
 
-// // Функция обновления состояния кнопок языка
-// function updateLanguageButtons() {
-//     const buttons = document.querySelectorAll('.language-buttons button');
-//     buttons.forEach(button => {
-//         button.classList.toggle('button-active', button.textContent.toLowerCase() === currentLanguage);
-//     });
-// }
+    // Загрузка VK-виджета динамически
+    async function loadVKWidget() {
+        return new Promise((resolve, reject) => {
+            if (typeof VK === 'undefined') {
+                const script = document.createElement('script');
+                script.src = "https://vk.com/js/api/openapi.js?168";
+                script.async = true;
+                script.onload = () => {
+                    if (typeof VK !== 'undefined' && VK.Widgets) {
+                        resolve();
+                    } else {
+                        reject('VK.Widgets not defined after script load');
+                    }
+                };
+                script.onerror = () => reject('Failed to load VK script');
+                document.head.appendChild(script);
+            } else {
+                resolve();
+            }
+        });
+    }
 
-// // Обработчик кликов по кнопкам языка
-// document.querySelectorAll('.language-buttons button').forEach(button => {
-//     button.addEventListener('click', event => {
-//         currentLanguage = button.textContent.toLowerCase(); // Устанавливаем язык по клику
-//         localStorage.setItem('language', currentLanguage); // Сохраняем выбранный язык
-//         loadTranslation(currentLanguage); // Загружаем перевод
-//         updateLanguageButtons(); // Обновляем состояние кнопок
-//     });
-// });
+    async function initializeVKWidget() {
+        try {
+            await loadVKWidget();
+            if (currentLanguage === 'ru' && typeof VK !== 'undefined' && VK.Widgets) {
+                VK.Widgets.Group("vk_groups", {
+                    mode: 1,
+                    no_cover: 1,
+                    width: 290,
+                    height: 290,
+                    color1: "FFFFFF",
+                    color2: "000000",
+                    color3: "666666"
+                }, 50158044);
+            }
+        } catch (error) {
+            console.error('Error initializing VK Widget:', error);
+        }
+    }
 
-// // Загрузка перевода и установка активной кнопки при первой загрузке страницы
-// document.addEventListener('DOMContentLoaded', () => {
-//     loadTranslation(currentLanguage);
-//     updateLanguageButtons();
-// });
+    async function renderTranslations() {
+        if (currentLanguage === 'en') {
+            if (!translationsCache['en']) {
+                translationsCache['en'] = await loadTranslations('en');
+            }
 
-// // Обновляем язык при навигации
-// window.addEventListener('popstate', () => {
-//     loadTranslation(currentLanguage);
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Новый код
-// Устанавливаем язык по умолчанию или читаем его из localStorage
-let currentLanguage = localStorage.getItem('language') || 'ru';
-
-// Функция загрузки перевода
-function loadTranslation(language) {
-    fetch(`languages/${language}-version.json`) // Путь к JSON-файлам
-        .then(response => {
-            if (!response.ok) throw new Error('Translation file not found'); // Обработка ошибки, если файл не найден
-            return response.json();
-        })
-        .then(translation => {
-            // Обновляем текст на странице
-            document.querySelectorAll('[data-key]').forEach(element => {
-                const key = element.getAttribute('data-key');
-                element.textContent = translation[key];
+            const elementsToTranslate = document.querySelectorAll('[data-key]');
+            elementsToTranslate.forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translationsCache['en'][key]) {
+                    el.innerHTML = translationsCache['en'][key];
+                } else {
+                    console.warn(`Key "${key}" is missing in translations`);
+                }
             });
 
-            // Обновляем содержимое виджета
-            const widgetContent = translation.widgetContent; // Получаем содержимое виджета
-            const widgetContainer = document.getElementById('widget-content');
-            widgetContainer.innerHTML = ''; // Очищаем контейнер виджета перед добавлением нового содержимого
-
-            // Добавляем код виджета для русского и английского языка
-            widgetContainer.innerHTML = widgetContent; // Добавляем HTML внутри виджета
-
-            // Инициализируем виджет ВКонтакте только для русского языка
-            if (language === 'ru' && typeof VK !== 'undefined' && VK.Widgets) {
-                VK.Widgets.Group("vk_groups", { mode: 1, no_cover: 1, width: 290, height: 290, color1: "FFFFFF", color2: "000000", color3: "666666" }, 50158044);
+            const widgetContainer = safeQuerySelector('#widget-content');
+            if (widgetContainer) {
+                widgetContainer.innerHTML = translationsCache['en'].widgetContent || '';
+                initializeVKWidget();
             }
-        })
-        .catch(error => console.error('Error loading translation:', error));
-}
+        } else if (currentLanguage === 'ru') {
+            // Возвращаем исходный контент при переключении обратно на русский
+            const elementsToRestore = document.querySelectorAll('[data-key]');
+            elementsToRestore.forEach(el => {
+                const key = el.getAttribute('data-key');
+                el.innerHTML = el.getAttribute('data-original');
+            });
 
-// Функция обновления состояния кнопок языка
-function updateLanguageButtons() {
-    const buttons = document.querySelectorAll('.language-buttons button');
-    buttons.forEach(button => {
-        // Принудительное обновление с использованием setTimeout
-        setTimeout(() => {
+            const widgetContainer = safeQuerySelector('#widget-content');
+            if (widgetContainer) {
+                widgetContainer.innerHTML = widgetContainer.getAttribute('data-original') || '';
+            }
+        }
+    }
+
+    function saveOriginalContent() {
+        const elementsToCache = document.querySelectorAll('[data-key]');
+        elementsToCache.forEach(el => {
+            el.setAttribute('data-original', el.innerHTML);
+        });
+
+        const widgetContainer = safeQuerySelector('#widget-content');
+        if (widgetContainer) {
+            widgetContainer.setAttribute('data-original', widgetContainer.innerHTML);
+        }
+    }
+
+    function updateLanguageButtons() {
+        const buttons = document.querySelectorAll('.language-buttons button');
+        buttons.forEach(button => {
             button.classList.toggle('button-active', button.textContent.toLowerCase() === currentLanguage);
-        }, 0);
-    });
-}
+        });
+    }
 
-// Обработчик кликов по кнопкам языка
-document.querySelectorAll('.language-buttons button').forEach(button => {
-    // Используем pointerdown для более быстрой реакции
-    button.addEventListener('pointerdown', event => {
-        currentLanguage = button.textContent.toLowerCase(); // Устанавливаем язык по клику
-        localStorage.setItem('language', currentLanguage); // Сохраняем выбранный язык
-        loadTranslation(currentLanguage); // Загружаем перевод
-        updateLanguageButtons(); // Обновляем состояние кнопок
+    const languageButtons = document.querySelectorAll('.language-buttons button');
+    languageButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            currentLanguage = button.textContent.toLowerCase();
+            localStorage.setItem('language', currentLanguage);
+            await renderTranslations();
+            updateLanguageButtons();
+        });
     });
-});
 
-// Загрузка перевода и установка активной кнопки при первой загрузке страницы
-document.addEventListener('DOMContentLoaded', () => {
-    loadTranslation(currentLanguage);
+    saveOriginalContent();
+    renderTranslations();
     updateLanguageButtons();
-});
-
-// Обновляем язык при навигации
-window.addEventListener('popstate', () => {
-    loadTranslation(currentLanguage);
 });

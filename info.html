@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.min.css">
+    <!-- Иконка сайта -->
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="./favicon.png">
+    <!-- Иконка сайта -->
+    <meta name="author" content="Bronnikov Aleksandr">
+    <meta name="keywords" content="Spacon, spacon music, masamune.spacon">
+    <meta name="description" content="SPACON Music - сайт музыканта с информацией по выпущенным релизам">
+    <!--  Open Graph мета-теги -->
+    <meta property="og:title" content="SPACON Music - сайт музыканта с информацией по выпущенным релизам">
+    <meta property="og:description" content="SPACON Music">
+    <meta property="og:image" content="./img/preview.jpg"> <!-- Картинка для превью -->
+    <meta property="og:url" content="./index.html">
+    <meta property="og:type" content="website">
+    <!--  Open Graph мета-теги -->
+
+    <!-- Прочие мета-теги -->
+    <meta property="og:site_name" content="SPACON Music">
+    <!-- Прочие мета-теги -->
+    <title>SPACON Music</title>
+    <script src="https://vk.com/js/api/openapi.js?168" type="text/javascript"></script>
+</head>
+
+<body>
+
+    <div class="background-wrapper"></div>
+    <div class="background-wrapper-gif"></div>
+
+    <div class="language-buttons">
+        <button class="button-active">RU</button>
+        <button>EN</button>
+    </div>
+
+    <div class="container">
+
+        <header class="header">
+
+            <!-- <div class="container"> -->
+            <nav class="header_button-wrapper">
+
+                <a class="header_button header_button-info" href="./index.html"><img src="./img/header/logo.png"
+                        alt="logo" class="header_logo"><span>SPACON <br>
+                        MUSIC</span></a>
+
+                <a class="header_button" href="https://masamunebalex.github.io/spacon-links/"
+                    data-key="music-link">Музыкальные
+                    площадки</a>
+
+                <a class="header_button button_active" href="#" data-key="info-link">Информация</a>
+            </nav>
+            <!-- </div> -->
+        </header>
+
+        <main class="main">
+            <!-- <div class="container"> -->
+            <div class="main_wrapper">
+
+                <section class="left-section">
+
+                    <div class="language-buttons">
+                        <button class="button-active">RU</button>
+                        <button>EN</button>
+                    </div>
+
+                    <div class="mini-vidget-links">
+                        <div class="soundcloud-block">
+                            <a href="https://soundcloud.com/spaconmusic" title="Soundcloud profile"><span
+                                    class="icon-soundcloud"></span>SoundCloud</a>
+                        </div>
+
+                        <div class="vkgroup-block">
+                            <a href="https://vk.com/spaconmusic" title="VK Group Profile"><span
+                                    class="icon-vk"></span>VK Group</a>
+                        </div>
+                    </div>
+
+                    <div class="main_title-block">
+                        <h1 class="main_header" data-key="info-about">Новости</h1>
+                    </div>
+
+                    <div class="main_info-block">
+                        <div class="main_info-header">
+                            <h3 data-key="about-site">О сайте</h3>
+                        </div>
+
+                        <div class="main_info-body">
+                            <img src="./img/preview.jpg" alt="preview img">
+                            <h3 data-key="greetings"><strong>Приветствую тебя, гость моего сайта.</strong></h3>
+
+                            <p data-key="p-one">Здесь я буду выкладывать всю актуальную
+                                информацию по моим музыкальным работам, а так же всем возможным изменениям и
+                                обновлениям.
+                            </p>
+
+                            <p data-key="p-two">Все возможные изменения будут находится во вкладке:</p>
+                            <span data-key="p-two-info">Информация</span>
+                            <p data-key="p-three">Для связи со мной используйте те или иные, удобные для вас
+                                <em><u>социальные
+                                        сети</u></em>.
+                            </p>
+                            <p data-key="p-four">Часть из
+                                которых есть во вкладке:</p>
+                            <span data-key="p-four-info">Музыкальные площадки</span>
+                        </div>
+                    </div>
+
+
+                </section>
+
+                <section class="right-section">
+
+                    <div class="main_title-block title_radius">
+                        <h2 class="main_vidgets-header" data-key="vidgets">Виджеты</h2>
+                    </div>
+
+                    <div class="main_vidgets">
+
+                        <div class="main_vidget">
+
+                            <div class="main_vidget-header">
+                                <h3>SoundCloud</h3>
+                            </div>
+
+                            <div class="main_vidget-element">
+                                <iframe width="100%" height="270px" scrolling="no" frameborder="no"
+                                    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/316538396&amp;color=%23f08cb4&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=true"></iframe>
+                            </div>
+                        </div>
+
+                        <div class="main_vidget">
+
+                            <div class="main_vidget-header">
+                                <h3 data-key="widget-name">VK Группа</h3>
+                            </div>
+
+                            <div class="main_vidget-element main_vidget-element-flex" id="widget-content">
+                                <div id="vk_groups"></div>
+                                <script type="text/javascript">
+                                    VK.Widgets.Group("vk_groups", { mode: 3, no_cover: 1, width: 290, height: 290, color1: "FFFFFF", color2: "000000", color3: "666666" }, 50158044);
+                                </script>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+            <!-- </div> -->
+        </main>
+
+
+        <!-- ------------Навигация между страницами------------- -->
+        <nav class="nav-pages">
+            <!-- <div class="container"> -->
+            <div class="nav-pages_wrapper">
+                <a href="./index.html" class="nav-pages_button nav-pages-active"><span>1</span></a>
+            </div>
+            <!-- </div> -->
+        </nav>
+        <!-- ------------Навигация между страницами------------- -->
+
+        <footer class="footer">
+            <!-- <div class="container"> -->
+            <div class="footer-wrapper">
+                <img src="./img/header/logo.png" alt="logo" class="header_logo">
+                <p>Copyright by <br> <span>SPACON Music</span></p>
+            </div>
+            <!-- </div> -->
+        </footer>
+    </div>
+    <script src="./js/script.js"></script>
+</body>
+
+</html>

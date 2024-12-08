@@ -106,6 +106,7 @@
                 // flex-direction: column;
                 transform: skewX(-16deg);
                 background: $secondary-color url(../img/xmas-theme/snow.gif) center center / cover no-repeat;
+                // В заависимости от темы будет менятся основной цвет кнопки $primary-color $secondary-color
 
                 img,
                 span {
@@ -130,6 +131,10 @@
 
             &:last-child {
                 border-radius: 0;
+            }
+
+            &-info:first-child {
+                background: $primary-color url(../img/xmas-theme/snow.gif) center center / cover no-repeat;
             }
         }
     }
@@ -294,6 +299,10 @@
                     font-size: 6vw;
                 }
             }
+        }
+
+        &_info-body {
+            padding: 30px;
         }
 
         &_header {
