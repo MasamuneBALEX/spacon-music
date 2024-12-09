@@ -1,25 +1,19 @@
 const mediaQuery = window.matchMedia('(max-width: 992px)');
 
-function handleMediaChange(e) {
-    const existingScript = document.querySelector('script[src="https://vk.com/js/api/openapi.js?169"]');
-
-    if (e.matches) {
-        // Если условие медиа-запроса выполнено (широкий экран)
-        if (!existingScript) {
-            const script = document.createElement('script');
-            script.src = 'https://vk.com/js/api/openapi.js?169';
-            script.async = true;
-            document.head.appendChild(script);
-            console.log('Скрипт загружен');
-        }
-    } else {
-        // Если условие медиа-запроса не выполнено (узкий экран)
-        if (existingScript) {
-            existingScript.remove();
-            console.log('Скрипт удалён');
-        }
+function checkAndRemove() {
+    const elementToDelete = document.querySelector('[data-key="delete-script"]');
+    if (mediaQuery.matches && elementToDelete) {
+        // Удаляем элемент из DOM
+        elementToDelete.remove();
+        console.log('Элемент удалён из DOM');
     }
 }
+
+// Проверяем изначально при загрузке страницы
+checkAndRemove();
+
+// Добавляем слушатель, чтобы следить за изменениями
+mediaQuery.addEventListener('change', checkAndRemove);
 
 function createRightSection() {
     const section = document.createElement('section');
