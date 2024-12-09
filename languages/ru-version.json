@@ -1,0 +1,13 @@
+{
+    "music-link": "Музыкальные площадки",
+    "info-link": "Информация",
+    "info-about": "Обновления",
+    "about-site": "О сайте",
+    "released-albums": "Все выпущенные альбомы",
+    "vidgets": "Виджеты",
+    "album-genre": "Жанр:",
+    "album-date": "Дата релиза:",
+    "album-tracks": "Количество треков:",
+    "widget-name": "VK Группа",
+    "widgetContent": "<div id=\"vk_groups\"></div>"
+}
